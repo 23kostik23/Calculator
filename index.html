@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .button-grid{
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+                margin: 20px;
+            }
+            button {
+                padding: 10px;
+                font-size: 16px;
+            }
+            #output {
+            width: 100%;
+            height: 60px; /* Высота полоски */
+            background-color: #7b7b7b; /* Цвет фона */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        body, html {
+            width: 100%;
+            margin: 0;
+        }
+
+        #img {
+            width: 100%;
+            display: block; /* Убеждаемся, что картинка отображается как блочный элемент */
+        }
+        </style>
+        <title> calculator </title>
+    </head>
+    <body>
+        <div class="button-grid">
+            <button id = 'clearAll'>Clear all</button>
+            <button id = '%'>%</button>
+            <button id = 'delete'>delete</button>
+            <button id = '/'>/</button>
+            <button id = '7'>7</button>
+            <button id = '8'>8</button>
+            <button id = '9'>9</button>
+            <button id = '*'>*</button>
+            <button id = '4'>4</button>
+            <button id = '5'>5</button>
+            <button id = '6'>6</button>
+            <button id = '-'>-</button>
+            <button id = '1'>1</button>
+            <button id = '2'>2</button>
+            <button id = '3'>3</button>
+            <button id = '+'>+</button>
+            <button id = '0'>0</button>
+            <button id = '.'>.</button>
+            <button id = '='>=</button>
+            <button id = '?'>?</button>
+        </div>
+        <div id="output" style="font-size: xx-large;"></div>
+        <center>
+        <img src="https://cdn.fishki.net/upload/post/201603/15/1884036/tn/maxresdefault.jpg" id = "img" style="display: none"> 
+        <button id = "hideImg" style="display: none"> Hide the image</button>
+        </center>
+        <script>
+            let symbols = [];
+
+            function deleteElem(){
+                symbols.pop();
+                return symbols;
+            }
+
+            function clearAll() {
+                symbols = [];
+                return symbols;
+            }
+
+            function calculate(){
+                let string = symbols.join('');
+                let result = eval(string);
+                console.log(result);
+                symbols.push('=', result);
+                updateOutput();
+                return result;
+            }
+
+            function updateOutput() {
+                const outputDiv = document.getElementById("output");
+                outputDiv.textContent = symbols.join('');
+            }
+
+            function hideImgAndButton(){
+                let img = document.getElementById('img');
+                let button = document.getElementById('hideImg');
+                img.style.display = 'none';
+                button.style.display = 'none';
+            }
+
+            function type(buttonId){
+                if(buttonId != '=' && buttonId != 'clearAll' && buttonId != 'delete' && buttonId != '?'){
+                    symbols.push(buttonId);
+                    console.log(symbols);
+                    updateOutput(); 
+                }
+                
+                else if(buttonId == '='){
+                    calculate();
+                }
+                else if(buttonId == 'clearAll'){
+                    clearAll();
+                    updateOutput();
+                }
+                else if(buttonId == 'delete'){
+                    deleteElem();
+                    updateOutput();
+                }
+                else if(buttonId == '?'){
+                    let img = document.getElementById('img');
+                    img.style.display = 'block';
+                    let hideImgButton = document.getElementById('hideImg');
+                    hideImgButton.style.display = 'block';
+                    hideImgButton.addEventListener('click', hideImgAndButton);
+                }
+                return symbols;
+            }
+            const buttonIds = ['clearAll', '%', 'delete', '/', '7', '8', '9', '*', '4', '5', '6', '-', '1', '2', '3', '+', '0','.', '=', '?'];
+            for(let id of buttonIds){
+                const button = document.getElementById(id);
+                if(button)
+                button.addEventListener('click', () => type(id));
+            }
+        </script>
+    </body>
+</html>
